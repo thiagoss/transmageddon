@@ -165,6 +165,8 @@ class TransmageddonUI:
        self.videorows=[]
        self.audiocodecs=[] # create lists to store the ordered lists of codecs
        self.videocodecs=[]
+
+       self._transcoder = None
 	
        # set flag so we remove bogus value from menu only once
        self.bogus=0
@@ -1065,6 +1067,12 @@ class TransmageddonUI:
 
 
    def on_debug_activate(self, widget):
+       if self._transcoder == None:
+           dialog = gtk.MessageDialog(self.TopWindow, gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT, gtk.MESSAGE_WARNING, gtk.BUTTONS_OK, "Cannot generate debug information before transcoding")
+           dialog.run()
+           dialog.destroy()
+           return
+
        dotfile = "/tmp/transmageddon-debug-graph.dot"
        pngfile = "/tmp/transmageddon-pipeline.png"
        if os.access(dotfile, os.F_OK):
